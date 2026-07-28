@@ -203,8 +203,16 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
 .post-featured img { width: 100%; height: auto; display: block; }
 .post-content { color: #33485c; font-size: 17px; line-height: 1.85; }
 .post-content h2 { margin: 40px 0 14px; color: var(--navy); font-size: 27px; letter-spacing: -1px; }
+.post-content h3 { margin: 30px 0 10px; color: var(--navy); font-size: 20px; letter-spacing: -.4px; }
 .post-content p { margin: 0 0 22px; }
+.post-content ul { margin: 0 0 22px; padding-left: 0; list-style: none; }
+.post-content li { position: relative; margin: 9px 0; padding-left: 26px; line-height: 1.7; }
+.post-content li::before { content: "✓"; position: absolute; left: 0; top: 1px; color: var(--green); font-weight: 700; }
+.post-content strong { color: var(--ink); }
+.post-content em { color: var(--muted); font-style: italic; }
 .post-content a { color: var(--blue); border-bottom: 1px solid #a9c9ed; }
+.post-readtime { position: relative; padding-left: 15px; }
+.post-readtime::before { content: ""; position: absolute; left: 0; top: 50%; width: 4px; height: 4px; background: rgba(255,255,255,.5); border-radius: 50%; transform: translateY(-50%); }
 .post-footer-actions { margin-top: 46px; padding-top: 34px; border-top: 1px solid var(--line); }
 .related-section { padding-top: 0; }
 .related-section .section-heading { margin-bottom: 40px; }

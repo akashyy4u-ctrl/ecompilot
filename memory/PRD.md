@@ -8,6 +8,11 @@ Static multi-page HTML/CSS/JS marketing site for EcomPilot (Amazon Seller Centra
 - Navigation order (all pages): Home, About Us, Services, Packages, Blog, Contact Us + Free Consultation button
 
 ## Work Log
+- 2025: Populated blog with the TWO uploaded client articles (replaced all sample posts):
+  1. "How to Lower Your Amazon Order Defect Rate (ODR)" — slug how-to-lower-amazon-order-defect-rate (Account Health)
+  2. "How to Reduce Amazon A-to-Z Guarantee Claims" — slug how-to-reduce-amazon-a-to-z-guarantee-claims (Customer Support)
+  - Content professionally rewritten (grammar/flow/tone) from the .docx files without changing meaning. Added per-post seoTitle + metaDescription; H2/H3 headings, checkmark bullet lists, conclusion, FAQ. Post template now shows estimated reading time (auto-computed from word count). Fixed Load More visibility (was overridden by .button display).
+
 - 2025: Updated pricing packages (Basic $100/7d, Standard $300/15d, Premium $750/30d) with new feature lists.
 - Created about.html; removed homepage "About Us" and "Why Choose Us" sections; removed hero-ribbon specialist items.
 - Added Blog:

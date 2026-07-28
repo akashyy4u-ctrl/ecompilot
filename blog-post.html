@@ -60,18 +60,24 @@
       }
 
       // SEO
-      document.title = post.title + ' | EcomPilot Blog';
-      setMeta('meta-description', post.excerpt);
-      setMeta('og-title', post.title);
-      setMeta('og-description', post.excerpt);
+      document.title = post.seoTitle || (post.title + ' | EcomPilot Blog');
+      setMeta('meta-description', post.metaDescription || post.excerpt);
+      setMeta('og-title', post.seoTitle || post.title);
+      setMeta('og-description', post.metaDescription || post.excerpt);
       setMeta('og-image', post.image);
+
+      // Estimated reading time (~200 words per minute)
+      var plain = post.content.replace(/<[^>]+>/g, ' ');
+      var words = plain.split(/\s+/).filter(Boolean).length;
+      var readMinutes = Math.max(1, Math.round(words / 200));
 
       // Content
       document.getElementById('post-category').textContent = post.category;
       document.getElementById('post-title').textContent = post.title;
       document.getElementById('post-meta').innerHTML =
         '<span class="post-author">By ' + post.author + '</span>' +
-        '<time datetime="' + post.date + '">' + fmtDate(post.date) + '</time>';
+        '<time datetime="' + post.date + '">' + fmtDate(post.date) + '</time>' +
+        '<span class="post-readtime">' + readMinutes + ' min read</span>';
       var img = document.getElementById('post-image');
       img.src = post.image; img.alt = post.title;
       document.getElementById('post-content').innerHTML = post.content;

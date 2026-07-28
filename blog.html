@@ -28,7 +28,7 @@
       <div class="blog-grid" id="blog-grid" data-testid="blog-grid"></div>
       <p class="blog-empty" id="blog-empty" hidden>No articles match your search yet.</p>
       <div class="blog-loadmore">
-        <button class="button button-ghost" id="blog-load-more" type="button" data-testid="blog-load-more" hidden>Load More Articles</button>
+        <button class="button button-ghost" id="blog-load-more" type="button" data-testid="blog-load-more" style="display:none">Load More Articles</button>
       </div>
     </div></section>
 
@@ -94,7 +94,7 @@
         var shown = filtered.slice(0, visible);
         grid.innerHTML = shown.map(cardHTML).join('');
         emptyMsg.hidden = filtered.length !== 0;
-        loadMoreBtn.hidden = visible >= filtered.length;
+        loadMoreBtn.style.display = visible >= filtered.length ? 'none' : 'inline-flex';
         requestAnimationFrame(function () {
           grid.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
         });
