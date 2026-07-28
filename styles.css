@@ -158,6 +158,8 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
   .hero-copy h1, .page-hero h1, .contact-title h1 { font-size: 40px; }.hero-copy .button-row { width: 100%; }.hero-copy .button-row .button { width: 100%; }.hero-visual { transform: scale(.67); margin: -80px -70px; width: calc(100% + 140px); }.dashboard-card { width: 430px; }.hero-proof { flex-wrap: wrap; }.hero-proof div:last-child { margin-top: 18px; }.about-panel { padding: 25px; }.about-panel blockquote { margin: 35px 0; font-size: 25px; }.check-list { grid-template-columns: 1fr; }.footer-grid { grid-template-columns: 1fr; }.footer-brand { grid-column: auto; }.process-grid { grid-template-columns: 1fr; }.contact-aside { grid-template-columns: 1fr; }.form-submit { width: 100%; }.price-card { padding: 30px 24px; }
 }
 
+.section-cta { display: flex; justify-content: center; margin-top: 52px; }
+
 /* ===== Blog (blog.html + blog-post.html) ===== */
 .blog-section { background: var(--off-white); }
 .blog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 46px; flex-wrap: wrap; }
