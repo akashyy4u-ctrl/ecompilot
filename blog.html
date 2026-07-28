@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Insights, tips, and updates for Amazon sellers, from account health and inventory to listings, claims, and reporting, by the EcomPilot team.">
+  <meta name="theme-color" content="#0b2a4a"><title>EcomPilot Blog | Insights & Tips for Amazon Sellers</title>
+  <link rel="canonical" href="blog.html">
+  <meta property="og:title" content="EcomPilot Blog | Insights & Tips for Amazon Sellers">
+  <meta property="og:description" content="Insights, tips, and updates for Amazon sellers.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><script src="script.js" defer></script><script src="blog-data.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" data-header><div class="container nav-wrap"><a class="brand" href="index.html" aria-label="EcomPilot home"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button><nav class="site-nav" aria-label="Main navigation" data-nav><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a class="active" href="blog.html">Blog</a><a href="contact.html">Contact Us</a><a class="button button-small" href="contact.html">Free Consultation <span>↗</span></a></nav></div></header>
+  <main id="main">
+    <section class="page-hero"><div class="container page-hero-grid"><div class="reveal"><div class="eyebrow light"><span></span> The EcomPilot Blog</div><h1>EcomPilot <em>Blog.</em></h1></div><div class="reveal delay-1"><p>Insights, tips, and updates for Amazon sellers.</p><a class="button button-light" href="contact.html">Talk to Our Team <span>↗</span></a></div></div><div class="page-hero-pattern"></div></section>
+
+    <section class="section blog-section" aria-label="Blog articles"><div class="container">
+      <div class="blog-toolbar reveal">
+        <label class="blog-search" aria-label="Search blog posts">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" id="blog-search" placeholder="Search articles..." autocomplete="off" data-testid="blog-search-input">
+        </label>
+        <div class="blog-categories" id="blog-categories" role="tablist" aria-label="Filter by category"></div>
+      </div>
+      <div class="blog-grid" id="blog-grid" data-testid="blog-grid"></div>
+      <p class="blog-empty" id="blog-empty" hidden>No articles match your search yet.</p>
+      <div class="blog-loadmore">
+        <button class="button button-ghost" id="blog-load-more" type="button" data-testid="blog-load-more" hidden>Load More Articles</button>
+      </div>
+    </div></section>
+
+    <section class="cta-section"><div class="container cta-inner reveal"><div><div class="eyebrow light"><span></span> Ready When You Are</div><h2>Put these ideas to work<br><em>on your account.</em></h2></div><div><p>Tell us what is slowing your Amazon business down. We’ll help build a focused support plan around it.</p><a class="button button-light" href="contact.html">Start a Conversation <span>↗</span></a></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Reliable Amazon Seller Central management for sellers ready to operate with more clarity.</p></div><div><h3>Explore</h3><a href="index.html">Home</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="contact.html">Contact Us</a></div><div><h3>Services</h3><a href="services.html">Account Health</a><a href="services.html">Inventory Management</a><a href="services.html">Product Listings</a><a href="services.html">Reporting</a></div><div><h3>Contact</h3><a href="mailto:nitinrawat9.10@gmail.com">nitinrawat9.10@gmail.com</a><span>Remote support, worldwide</span><a href="contact.html">Book a consultation →</a></div></div><div class="container footer-bottom"><span>© <span data-year></span> EcomPilot. All rights reserved.</span><span>Amazon Seller Central Management &amp; VA Services</span></div></footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var PAGE_SIZE = 3;
+      var data = (window.ECOMPILOT_BLOG && window.ECOMPILOT_BLOG.posts) || [];
+      var grid = document.getElementById('blog-grid');
+      var catWrap = document.getElementById('blog-categories');
+      var searchInput = document.getElementById('blog-search');
+      var loadMoreBtn = document.getElementById('blog-load-more');
+      var emptyMsg = document.getElementById('blog-empty');
+      var activeCategory = 'All';
+      var query = '';
+      var visible = PAGE_SIZE;
+
+      function fmtDate(iso) {
+        var d = new Date(iso + 'T00:00:00');
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      function getCategories() {
+        var set = ['All'];
+        data.forEach(function (p) { if (set.indexOf(p.category) === -1) set.push(p.category); });
+        return set;
+      }
+
+      function getFiltered() {
+        return data.filter(function (p) {
+          var matchesCat = activeCategory === 'All' || p.category === activeCategory;
+          var q = query.trim().toLowerCase();
+          var matchesQuery = !q || (p.title + ' ' + p.excerpt + ' ' + (p.tags || []).join(' ')).toLowerCase().indexOf(q) !== -1;
+          return matchesCat && matchesQuery;
+        });
+      }
+
+      function cardHTML(p) {
+        var url = 'blog-post.html?slug=' + encodeURIComponent(p.slug);
+        return '<article class="blog-card reveal">' +
+          '<a class="blog-card-media" href="' + url + '" aria-label="' + p.title + '">' +
+          '<img src="' + p.image + '" alt="' + p.title + '" loading="lazy">' +
+          '<span class="blog-badge">' + p.category + '</span></a>' +
+          '<div class="blog-card-body">' +
+          '<div class="blog-meta"><time datetime="' + p.date + '">' + fmtDate(p.date) + '</time><span>' + p.author + '</span></div>' +
+          '<h2><a href="' + url + '">' + p.title + '</a></h2>' +
+          '<p>' + p.excerpt + '</p>' +
+          '<a class="text-link" href="' + url + '" data-testid="read-more-' + p.slug + '">Read More <span>→</span></a>' +
+          '</div></article>';
+      }
+
+      function renderCategories() {
+        catWrap.innerHTML = getCategories().map(function (c) {
+          return '<button type="button" class="blog-chip' + (c === activeCategory ? ' active' : '') + '" data-cat="' + c + '" data-testid="blog-cat-' + c.toLowerCase().replace(/\s+/g, '-') + '">' + c + '</button>';
+        }).join('');
+      }
+
+      function render() {
+        var filtered = getFiltered();
+        var shown = filtered.slice(0, visible);
+        grid.innerHTML = shown.map(cardHTML).join('');
+        emptyMsg.hidden = filtered.length !== 0;
+        loadMoreBtn.hidden = visible >= filtered.length;
+        requestAnimationFrame(function () {
+          grid.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+        });
+      }
+
+      catWrap.addEventListener('click', function (e) {
+        var btn = e.target.closest('.blog-chip');
+        if (!btn) return;
+        activeCategory = btn.getAttribute('data-cat');
+        visible = PAGE_SIZE;
+        renderCategories();
+        render();
+      });
+      searchInput.addEventListener('input', function () { query = this.value; visible = PAGE_SIZE; render(); });
+      loadMoreBtn.addEventListener('click', function () { visible += PAGE_SIZE; render(); });
+
+      renderCategories();
+      render();
+    });
+  </script></body></html>

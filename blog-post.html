@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" id="meta-description" content="Read the latest insights, tips, and updates for Amazon sellers on the EcomPilot blog.">
+  <meta name="theme-color" content="#0b2a4a"><title>Blog Post | EcomPilot</title>
+  <meta property="og:type" content="article">
+  <meta property="og:title" id="og-title" content="EcomPilot Blog">
+  <meta property="og:description" id="og-description" content="Insights, tips, and updates for Amazon sellers.">
+  <meta property="og:image" id="og-image" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><script src="script.js" defer></script><script src="blog-data.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" data-header><div class="container nav-wrap"><a class="brand" href="index.html" aria-label="EcomPilot home"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button><nav class="site-nav" aria-label="Main navigation" data-nav><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a class="active" href="blog.html">Blog</a><a href="contact.html">Contact Us</a><a class="button button-small" href="contact.html">Free Consultation <span>↗</span></a></nav></div></header>
+  <main id="main">
+    <article class="post" id="post-root" data-testid="blog-post">
+      <header class="post-hero">
+        <div class="container post-hero-inner">
+          <a class="post-back" href="blog.html" data-testid="back-to-blog-top"><span aria-hidden="true">←</span> Back to Blog</a>
+          <span class="post-badge" id="post-category"></span>
+          <h1 id="post-title">Loading…</h1>
+          <div class="post-meta" id="post-meta"></div>
+        </div>
+        <div class="page-hero-pattern"></div>
+      </header>
+      <div class="container post-body">
+        <figure class="post-featured"><img id="post-image" src="" alt=""></figure>
+        <section class="post-content" id="post-content"></section>
+        <div class="post-footer-actions">
+          <a class="button button-ghost" href="blog.html" data-testid="back-to-blog-bottom"><span aria-hidden="true">←</span> Back to Blog</a>
+        </div>
+      </div>
+    </article>
+
+    <section class="section blog-section related-section" id="related-section" hidden><div class="container">
+      <div class="section-heading"><div class="eyebrow"><span></span> Keep Reading</div><h2>Related <em>articles.</em></h2></div>
+      <div class="blog-grid" id="related-grid"></div>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Reliable Amazon Seller Central management for sellers ready to operate with more clarity.</p></div><div><h3>Explore</h3><a href="index.html">Home</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="contact.html">Contact Us</a></div><div><h3>Services</h3><a href="services.html">Account Health</a><a href="services.html">Inventory Management</a><a href="services.html">Product Listings</a><a href="services.html">Reporting</a></div><div><h3>Contact</h3><a href="mailto:nitinrawat9.10@gmail.com">nitinrawat9.10@gmail.com</a><span>Remote support, worldwide</span><a href="contact.html">Book a consultation →</a></div></div><div class="container footer-bottom"><span>© <span data-year></span> EcomPilot. All rights reserved.</span><span>Amazon Seller Central Management &amp; VA Services</span></div></footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var data = (window.ECOMPILOT_BLOG && window.ECOMPILOT_BLOG.posts) || [];
+      var slug = new URLSearchParams(window.location.search).get('slug');
+      var post = data.filter(function (p) { return p.slug === slug; })[0] || data[0];
+
+      function fmtDate(iso) {
+        var d = new Date(iso + 'T00:00:00');
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+      function setMeta(id, val) { var el = document.getElementById(id); if (el) el.setAttribute('content', val); }
+
+      if (!post) {
+        document.getElementById('post-title').textContent = 'Article not found';
+        document.getElementById('post-content').innerHTML = '<p>Sorry, we could not find that article. <a class="text-link" href="blog.html">Return to the blog <span>→</span></a></p>';
+        return;
+      }
+
+      // SEO
+      document.title = post.title + ' | EcomPilot Blog';
+      setMeta('meta-description', post.excerpt);
+      setMeta('og-title', post.title);
+      setMeta('og-description', post.excerpt);
+      setMeta('og-image', post.image);
+
+      // Content
+      document.getElementById('post-category').textContent = post.category;
+      document.getElementById('post-title').textContent = post.title;
+      document.getElementById('post-meta').innerHTML =
+        '<span class="post-author">By ' + post.author + '</span>' +
+        '<time datetime="' + post.date + '">' + fmtDate(post.date) + '</time>';
+      var img = document.getElementById('post-image');
+      img.src = post.image; img.alt = post.title;
+      document.getElementById('post-content').innerHTML = post.content;
+
+      // Related posts (same category first, then others), max 3
+      var related = data.filter(function (p) { return p.slug !== post.slug && p.category === post.category; });
+      data.forEach(function (p) { if (p.slug !== post.slug && related.indexOf(p) === -1) related.push(p); });
+      related = related.slice(0, 3);
+      if (related.length) {
+        document.getElementById('related-section').hidden = false;
+        document.getElementById('related-grid').innerHTML = related.map(function (p) {
+          var url = 'blog-post.html?slug=' + encodeURIComponent(p.slug);
+          return '<article class="blog-card reveal visible">' +
+            '<a class="blog-card-media" href="' + url + '" aria-label="' + p.title + '"><img src="' + p.image + '" alt="' + p.title + '" loading="lazy"><span class="blog-badge">' + p.category + '</span></a>' +
+            '<div class="blog-card-body"><div class="blog-meta"><time datetime="' + p.date + '">' + fmtDate(p.date) + '</time><span>' + p.author + '</span></div>' +
+            '<h2><a href="' + url + '">' + p.title + '</a></h2><p>' + p.excerpt + '</p>' +
+            '<a class="text-link" href="' + url + '">Read More <span>→</span></a></div></article>';
+        }).join('');
+      }
+    });
+  </script>
+</body></html>
