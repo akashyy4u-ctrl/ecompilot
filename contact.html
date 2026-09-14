@@ -1,10 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Contact EcomPilot for a free consultation about Amazon Seller Central management. Get in touch with our team via email, phone, or WhatsApp.">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Contact EcomPilot for a free consultation about Amazon Seller Central management. Get in touch with our team.">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <title>Contact EcomPilot | Amazon Seller Support</title>
+  <style>
+    .form-message {
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .form-success {
+      background-color: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      color: #2e7d32;
+    }
+    .form-error {
+      background-color: #ffebee;
+      border-left: 4px solid #f44336;
+      color: #c62828;
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a><header class="site-header" data-header><div class="container nav-wrap"><a class="brand" href="index.html" aria-label="EcomPilot home"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button><nav class="site-nav" aria-label="Main navigation" data-nav><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="blog.html">Blog</a><a class="active" href="contact.html">Contact Us</a><a class="button button-small" href="#contact-form">Free Consultation <span>↗</span></a></nav></div></header>
@@ -12,16 +41,12 @@
     <section class="contact-hero"><div class="container"><div class="contact-title reveal"><div class="eyebrow light"><span></span> Contact EcomPilot</div><h1>Let's make your Amazon operations <em>easier to manage.</em></h1><p>Tell us where your account needs support. We'll reply with practical next steps and a clear recommendation.</p></div></div></section>
     <section class="contact-main"><div class="container contact-grid">
       <div class="contact-form-card reveal" id="contact-form"><div class="form-heading"><span>START A CONVERSATION</span><h2>How can we help?</h2><p>Complete the form and we'll get back to you as soon as possible.</p></div>
+        <div class="form-message form-success" id="successMessage" style="display: none;">
+          <strong>✓ Thank you!</strong> Your enquiry has been received. We'll contact you within 24 hours via WhatsApp or email.
+        </div>
         <form id="contactForm" method="POST" action="https://formspree.io/f/mgvejqon">
-          <div class="form-message form-success" id="successMessage" style="display: none;">
-            <strong>✓ Thank you!</strong> Your enquiry has been received. We'll contact you within 24 hours via email or WhatsApp.
-          </div>
-          <div class="form-message form-error" id="errorMessage" style="display: none;">
-            <strong>Oops!</strong> Something went wrong. Please try again or contact us directly:
-            <br><a href="https://wa.me/919646505662" target="_blank" style="color: inherit; text-decoration: underline;">WhatsApp: +91 9646505662</a> or <a href="mailto:nitinrawat9.10@gmail.com" style="color: inherit; text-decoration: underline;">Email: nitinrawat9.10@gmail.com</a>
-          </div>
           <div class="field-row"><label>Full name<input type="text" name="name" autocomplete="name" placeholder="Your name" required></label><label>Business email<input type="email" name="email" autocomplete="email" placeholder="you@company.com" required></label></div>
-          <div class="field-row"><label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="Your phone number" required></label><label>Interested in<select name="package" required><option value="">Select a service</option><option value="basic">Basic Package</option><option value="standard">Standard Package</option><option value="premium">Premium Package</option><option value="custom">Custom Package</option><option value="services">Individual Services</option></select></label></div>
+          <div class="field-row"><label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="Your phone number"></label><label>Interested in<select name="package" required><option value="">Select a service</option><option value="basic">Basic Package</option><option value="standard">Standard Package</option><option value="premium">Premium Package</option><option value="custom">Custom Package</option><option value="services">Individual Services</option></select></label></div>
           <label>How can we support you?<textarea name="message" rows="6" placeholder="Tell us about your Amazon account, current challenges, and the support you need..." required></textarea></label>
           <button class="button form-submit" type="submit" id="submitBtn">Send Enquiry <span>↗</span></button><p class="form-note">By submitting, you agree that EcomPilot may contact you about your enquiry. Your information stays confidential.</p>
         </form>
@@ -37,29 +62,30 @@
   <script defer>
     // Contact form handler with Formspree
     document.getElementById('contactForm').addEventListener('submit', function(e) {
+      // Let Formspree handle the submission
+      // After submission, show success message
+      const form = this;
       const submitBtn = document.getElementById('submitBtn');
+      const successMessage = document.getElementById('successMessage');
+      
       submitBtn.disabled = true;
       submitBtn.innerHTML = 'Sending...';
-    });
-
-    // Formspree redirect handling
-    window.addEventListener('message', function(event) {
-      if (event.data.type === 'formspree') {
-        const successMsg = document.getElementById('successMessage');
-        const errorMsg = document.getElementById('errorMessage');
-        const submitBtn = document.getElementById('submitBtn');
+      
+      // Give Formspree a moment to process, then show success
+      setTimeout(function() {
+        successMessage.style.display = 'block';
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
         
-        if (event.data.success) {
-          successMsg.style.display = 'block';
-          errorMsg.style.display = 'none';
-          document.getElementById('contactForm').reset();
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
-          
-          // Scroll to success message
-          successMsg.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
+        // Scroll to success message
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+        
+        // Hide message after 5 seconds
+        setTimeout(function() {
+          successMessage.style.display = 'none';
+        }, 5000);
+      }, 1500);
     });
 
     // Newsletter form handler (if exists)
