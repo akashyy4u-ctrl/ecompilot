@@ -44,10 +44,13 @@
         <div class="form-message form-success" id="successMessage" style="display: none;">
           <strong>✓ Thank you!</strong> Your enquiry has been received. We'll contact you within 24 hours via WhatsApp or email.
         </div>
-        <form id="contactForm" method="POST" action="https://formspree.io/f/mgvejqon">
-          <div class="field-row"><label>Full name<input type="text" name="name" autocomplete="name" placeholder="Your name" required></label><label>Business email<input type="email" name="email" autocomplete="email" placeholder="you@company.com" required></label></div>
-          <div class="field-row"><label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="Your phone number"></label><label>Interested in<select name="package" required><option value="">Select a service</option><option value="basic">Basic Package</option><option value="standard">Standard Package</option><option value="premium">Premium Package</option><option value="custom">Custom Package</option><option value="services">Individual Services</option></select></label></div>
-          <label>How can we support you?<textarea name="message" rows="6" placeholder="Tell us about your Amazon account, current challenges, and the support you need..." required></textarea></label>
+        <div class="form-message form-error" id="errorMessage" style="display: none;">
+          <strong>⚠ Error!</strong> Could not send your message. Please try again or contact us directly via <a href="https://wa.me/919646505662" target="_blank" style="color: inherit; text-decoration: underline;">WhatsApp</a> or <a href="mailto:nitinrawat9.10@gmail.com" style="color: inherit; text-decoration: underline;">email</a>.
+        </div>
+        <form id="contactForm">
+          <div class="field-row"><label>Full name<input type="text" id="name" name="name" autocomplete="name" placeholder="Your name" required></label><label>Business email<input type="email" id="email" name="email" autocomplete="email" placeholder="you@company.com" required></label></div>
+          <div class="field-row"><label>Phone number<input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="Your phone number"></label><label>Interested in<select id="package" name="package" required><option value="">Select a service</option><option value="basic">Basic Package</option><option value="standard">Standard Package</option><option value="premium">Premium Package</option><option value="custom">Custom Package</option><option value="services">Individual Services</option></select></label></div>
+          <label>How can we support you?<textarea id="message" name="message" rows="6" placeholder="Tell us about your Amazon account, current challenges, and the support you need..." required></textarea></label>
           <button class="button form-submit" type="submit" id="submitBtn">Send Enquiry <span>↗</span></button><p class="form-note">By submitting, you agree that EcomPilot may contact you about your enquiry. Your information stays confidential.</p>
         </form>
       </div>
@@ -59,41 +62,77 @@
   </main>
   <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Your dedicated Amazon Seller Central management partner.</p><div class="social-links"><a href="https://wa.me/919646505662" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WhatsApp</a><a href="mailto:nitinrawat9.10@gmail.com" aria-label="Email">Email</a></div></div><div class="footer-column"><span class="footer-label">Explore</span><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="blog.html">Blog</a></div><div class="footer-column"><span class="footer-label">Support</span><a href="contact.html">Contact Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">FAQ</a></div><div class="footer-newsletter"><span class="footer-label">Get Updates</span><p>Subscribe to our newsletter for Amazon seller tips.</p><form class="newsletter-form" id="newsletterForm"><input type="email" placeholder="Your email" required><button type="submit" aria-label="Subscribe">→</button></form></div></div><div class="footer-bottom"><p>&copy; 2025 EcomPilot. All rights reserved.</p></div></footer>
   <script src="script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
   <script defer>
-    // Contact form handler with Formspree
+    // Initialize EmailJS
+    (function() {
+      emailjs.init("U_1k6b5R0iBHBhpqB");
+    })();
+
+    // Contact form handler
     document.getElementById('contactForm').addEventListener('submit', function(e) {
-      // Let Formspree handle the submission
-      // After submission, show success message
+      e.preventDefault();
+      
       const form = this;
       const submitBtn = document.getElementById('submitBtn');
       const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
       
+      // Hide both messages
+      successMessage.style.display = 'none';
+      errorMessage.style.display = 'none';
+      
+      // Disable button
       submitBtn.disabled = true;
       submitBtn.innerHTML = 'Sending...';
       
-      // Give Formspree a moment to process, then show success
-      setTimeout(function() {
-        successMessage.style.display = 'block';
-        form.reset();
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
-        
-        // Scroll to success message
-        successMessage.scrollIntoView({ behavior: 'smooth' });
-        
-        // Hide message after 5 seconds
-        setTimeout(function() {
+      // Collect form data
+      const templateParams = {
+        to_email: 'nitinrawat9.10@gmail.com',
+        from_name: document.getElementById('name').value,
+        from_email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        package: document.getElementById('package').value,
+        message: document.getElementById('message').value,
+        reply_to: document.getElementById('email').value
+      };
+      
+      // Send email via EmailJS
+      emailjs.send('service_ecompilot', 'template_ecompilot', templateParams)
+        .then(function(response) {
+          // Success
+          successMessage.style.display = 'block';
+          errorMessage.style.display = 'none';
+          form.reset();
+          
+          // Scroll to success message
+          successMessage.scrollIntoView({ behavior: 'smooth' });
+          
+          // Hide message after 5 seconds
+          setTimeout(function() {
+            successMessage.style.display = 'none';
+          }, 5000);
+        }, function(error) {
+          // Error
+          console.error('EmailJS error:', error);
+          errorMessage.style.display = 'block';
           successMessage.style.display = 'none';
-        }, 5000);
-      }, 1500);
+          
+          // Scroll to error message
+          errorMessage.scrollIntoView({ behavior: 'smooth' });
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
+        });
     });
 
-    // Newsletter form handler (if exists)
+    // Newsletter form handler
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
-      newsletterForm.addEventListener('submit', async (e) => {
+      newsletterForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = e.target.querySelector('input[type="email"]').value;
+        const email = this.querySelector('input[type="email"]').value;
         console.log('Newsletter signup:', email);
       });
     }
