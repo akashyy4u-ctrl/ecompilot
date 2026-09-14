@@ -62,14 +62,8 @@
   </main>
   <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Your dedicated Amazon Seller Central management partner.</p><div class="social-links"><a href="https://wa.me/919646505662" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WhatsApp</a><a href="mailto:nitinrawat9.10@gmail.com" aria-label="Email">Email</a></div></div><div class="footer-column"><span class="footer-label">Explore</span><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="blog.html">Blog</a></div><div class="footer-column"><span class="footer-label">Support</span><a href="contact.html">Contact Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">FAQ</a></div><div class="footer-newsletter"><span class="footer-label">Get Updates</span><p>Subscribe to our newsletter for Amazon seller tips.</p><form class="newsletter-form" id="newsletterForm"><input type="email" placeholder="Your email" required><button type="submit" aria-label="Subscribe">→</button></form></div></div><div class="footer-bottom"><p>&copy; 2025 EcomPilot. All rights reserved.</p></div></footer>
   <script src="script.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
   <script defer>
-    // Initialize EmailJS
-    (function() {
-      emailjs.init("U_1k6b5R0iBHBhpqB");
-    })();
-
-    // Contact form handler
+    // Contact form handler - Send via Web3Forms (no backend needed)
     document.getElementById('contactForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -87,19 +81,17 @@
       submitBtn.innerHTML = 'Sending...';
       
       // Collect form data
-      const templateParams = {
-        to_email: 'nitinrawat9.10@gmail.com',
-        from_name: document.getElementById('name').value,
-        from_email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        package: document.getElementById('package').value,
-        message: document.getElementById('message').value,
-        reply_to: document.getElementById('email').value
-      };
+      const formData = new FormData(form);
+      formData.append('access_key', '8d3e5f7c-2a9b-4e1f-8c3d-6e9a2f5b7c1d');
       
-      // Send email via EmailJS
-      emailjs.send('service_ecompilot', 'template_ecompilot', templateParams)
-        .then(function(response) {
+      // Send via Web3Forms API
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
           // Success
           successMessage.style.display = 'block';
           errorMessage.style.display = 'none';
@@ -112,19 +104,23 @@
           setTimeout(function() {
             successMessage.style.display = 'none';
           }, 5000);
-        }, function(error) {
+        } else {
           // Error
-          console.error('EmailJS error:', error);
           errorMessage.style.display = 'block';
           successMessage.style.display = 'none';
-          
-          // Scroll to error message
           errorMessage.scrollIntoView({ behavior: 'smooth' });
-        })
-        .finally(function() {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
-        });
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
+        errorMessage.scrollIntoView({ behavior: 'smooth' });
+      })
+      .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
+      });
     });
 
     // Newsletter form handler
