@@ -28,9 +28,6 @@
       border-left: 4px solid #4caf50;
       color: #2e7d32;
     }
-    .contact-method {
-      display: inline-block !important;
-    }
   </style>
 </head>
 <body>
@@ -40,9 +37,9 @@
     <section class="contact-main"><div class="container contact-grid">
       <div class="contact-form-card reveal" id="contact-form"><div class="form-heading"><span>START A CONVERSATION</span><h2>How can we help?</h2><p>Complete the form and we'll get back to you as soon as possible.</p></div>
         <div class="form-message form-success" id="successMessage" style="display: none;">
-          <strong>✓ Thank you!</strong> Redirecting you to WhatsApp to connect with us...
+          <strong>✓ Thank you!</strong> Opening WhatsApp to connect with us...
         </div>
-        <form id="contactForm">
+        <form id="contactForm" onsubmit="handleContactForm(event)">
           <div class="field-row"><label>Full name<input type="text" id="name" name="name" autocomplete="name" placeholder="Your name" required></label><label>Business email<input type="email" id="email" name="email" autocomplete="email" placeholder="you@company.com" required></label></div>
           <div class="field-row"><label>Phone number<input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="Your phone number"></label><label>Interested in<select id="package" name="package" required><option value="">Select a service</option><option value="basic">Basic Package</option><option value="standard">Standard Package</option><option value="premium">Premium Package</option><option value="custom">Custom Package</option><option value="services">Individual Services</option></select></label></div>
           <label>How can we support you?<textarea id="message" name="message" rows="6" placeholder="Tell us about your Amazon account, current challenges, and the support you need..." required></textarea></label>
@@ -58,9 +55,9 @@
   <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Your dedicated Amazon Seller Central management partner.</p><div class="social-links"><a href="https://wa.me/919646505662" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WhatsApp</a><a href="mailto:nitinrawat9.10@gmail.com" aria-label="Email">Email</a></div></div><div class="footer-column"><span class="footer-label">Explore</span><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="blog.html">Blog</a></div><div class="footer-column"><span class="footer-label">Support</span><a href="contact.html">Contact Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">FAQ</a></div><div class="footer-newsletter"><span class="footer-label">Get Updates</span><p>Subscribe to our newsletter for Amazon seller tips.</p><form class="newsletter-form" id="newsletterForm"><input type="email" placeholder="Your email" required><button type="submit" aria-label="Subscribe">→</button></form></div></div><div class="footer-bottom"><p>&copy; 2025 EcomPilot. All rights reserved.</p></div></footer>
   <script src="script.js" defer></script>
   <script defer>
-    // Simple contact form - Direct WhatsApp & Email
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    // Handle contact form - NO server submission, just open WhatsApp/Email
+    function handleContactForm(event) {
+      event.preventDefault();
       
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
@@ -74,40 +71,25 @@
       
       // Create WhatsApp message
       const whatsappMessage = encodeURIComponent(
-        `Hello EcomPilot,\n\nI'm interested in learning more about your services.\n\n` +
-        `📝 Details:\n` +
+        `Hello EcomPilot,\n\n` +
+        `I'm interested in your services.\n\n` +
+        `📝 My Details:\n` +
         `Name: ${name}\n` +
         `Email: ${email}\n` +
         `Phone: ${phone}\n` +
-        `Package: ${package_type}\n\n` +
+        `Package Interest: ${package_type}\n\n` +
         `Message: ${message}`
       );
       
-      // Create Gmail compose link
-      const gmailMessage = encodeURIComponent(
-        `Hello EcomPilot,\n\nI'm interested in learning more about your services.\n\n` +
-        `Details:\n` +
-        `Name: ${name}\n` +
-        `Email: ${email}\n` +
-        `Phone: ${phone}\n` +
-        `Package: ${package_type}\n\n` +
-        `Message: ${message}`
-      );
-      
-      // Wait 1.5 seconds then open WhatsApp
+      // Wait and open WhatsApp
       setTimeout(() => {
         window.open(`https://wa.me/919646505662?text=${whatsappMessage}`, '_blank');
         
-        // Also send email
-        window.location.href = `mailto:nitinrawat9.10@gmail.com?subject=EcomPilot%20Inquiry%20from%20${encodeURIComponent(name)}&body=${gmailMessage}`;
-        
-        // Reset form after 2 seconds
-        setTimeout(() => {
-          this.reset();
-          successMessage.style.display = 'none';
-        }, 2000);
-      }, 1500);
-    });
+        // Reset form
+        document.getElementById('contactForm').reset();
+        successMessage.style.display = 'none';
+      }, 800);
+    }
 
     // Newsletter form handler
     const newsletterForm = document.getElementById('newsletterForm');
