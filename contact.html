@@ -28,10 +28,8 @@
       border-left: 4px solid #4caf50;
       color: #2e7d32;
     }
-    .form-error {
-      background-color: #ffebee;
-      border-left: 4px solid #f44336;
-      color: #c62828;
+    .contact-method {
+      display: inline-block !important;
     }
   </style>
 </head>
@@ -42,10 +40,7 @@
     <section class="contact-main"><div class="container contact-grid">
       <div class="contact-form-card reveal" id="contact-form"><div class="form-heading"><span>START A CONVERSATION</span><h2>How can we help?</h2><p>Complete the form and we'll get back to you as soon as possible.</p></div>
         <div class="form-message form-success" id="successMessage" style="display: none;">
-          <strong>✓ Thank you!</strong> Your enquiry has been received. We'll contact you within 24 hours via WhatsApp or email.
-        </div>
-        <div class="form-message form-error" id="errorMessage" style="display: none;">
-          <strong>⚠ Error!</strong> Could not send your message. Please try again or contact us directly via <a href="https://wa.me/919646505662" target="_blank" style="color: inherit; text-decoration: underline;">WhatsApp</a> or <a href="mailto:nitinrawat9.10@gmail.com" style="color: inherit; text-decoration: underline;">email</a>.
+          <strong>✓ Thank you!</strong> Redirecting you to WhatsApp to connect with us...
         </div>
         <form id="contactForm">
           <div class="field-row"><label>Full name<input type="text" id="name" name="name" autocomplete="name" placeholder="Your name" required></label><label>Business email<input type="email" id="email" name="email" autocomplete="email" placeholder="you@company.com" required></label></div>
@@ -63,64 +58,55 @@
   <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand-light" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Ecom<span>Pilot</span></span></a><p>Your dedicated Amazon Seller Central management partner.</p><div class="social-links"><a href="https://wa.me/919646505662" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WhatsApp</a><a href="mailto:nitinrawat9.10@gmail.com" aria-label="Email">Email</a></div></div><div class="footer-column"><span class="footer-label">Explore</span><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="blog.html">Blog</a></div><div class="footer-column"><span class="footer-label">Support</span><a href="contact.html">Contact Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">FAQ</a></div><div class="footer-newsletter"><span class="footer-label">Get Updates</span><p>Subscribe to our newsletter for Amazon seller tips.</p><form class="newsletter-form" id="newsletterForm"><input type="email" placeholder="Your email" required><button type="submit" aria-label="Subscribe">→</button></form></div></div><div class="footer-bottom"><p>&copy; 2025 EcomPilot. All rights reserved.</p></div></footer>
   <script src="script.js" defer></script>
   <script defer>
-    // Contact form handler - Send via Web3Forms (no backend needed)
+    // Simple contact form - Direct WhatsApp & Email
     document.getElementById('contactForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const form = this;
-      const submitBtn = document.getElementById('submitBtn');
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const package_type = document.getElementById('package').value;
+      const message = document.getElementById('message').value;
+      
+      // Show success message
       const successMessage = document.getElementById('successMessage');
-      const errorMessage = document.getElementById('errorMessage');
+      successMessage.style.display = 'block';
       
-      // Hide both messages
-      successMessage.style.display = 'none';
-      errorMessage.style.display = 'none';
+      // Create WhatsApp message
+      const whatsappMessage = encodeURIComponent(
+        `Hello EcomPilot,\n\nI'm interested in learning more about your services.\n\n` +
+        `📝 Details:\n` +
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Phone: ${phone}\n` +
+        `Package: ${package_type}\n\n` +
+        `Message: ${message}`
+      );
       
-      // Disable button
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Sending...';
+      // Create Gmail compose link
+      const gmailMessage = encodeURIComponent(
+        `Hello EcomPilot,\n\nI'm interested in learning more about your services.\n\n` +
+        `Details:\n` +
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Phone: ${phone}\n` +
+        `Package: ${package_type}\n\n` +
+        `Message: ${message}`
+      );
       
-      // Collect form data
-      const formData = new FormData(form);
-      formData.append('access_key', '8d3e5f7c-2a9b-4e1f-8c3d-6e9a2f5b7c1d');
-      
-      // Send via Web3Forms API
-      fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Success
-          successMessage.style.display = 'block';
-          errorMessage.style.display = 'none';
-          form.reset();
-          
-          // Scroll to success message
-          successMessage.scrollIntoView({ behavior: 'smooth' });
-          
-          // Hide message after 5 seconds
-          setTimeout(function() {
-            successMessage.style.display = 'none';
-          }, 5000);
-        } else {
-          // Error
-          errorMessage.style.display = 'block';
+      // Wait 1.5 seconds then open WhatsApp
+      setTimeout(() => {
+        window.open(`https://wa.me/919646505662?text=${whatsappMessage}`, '_blank');
+        
+        // Also send email
+        window.location.href = `mailto:nitinrawat9.10@gmail.com?subject=EcomPilot%20Inquiry%20from%20${encodeURIComponent(name)}&body=${gmailMessage}`;
+        
+        // Reset form after 2 seconds
+        setTimeout(() => {
+          this.reset();
           successMessage.style.display = 'none';
-          errorMessage.scrollIntoView({ behavior: 'smooth' });
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        errorMessage.style.display = 'block';
-        successMessage.style.display = 'none';
-        errorMessage.scrollIntoView({ behavior: 'smooth' });
-      })
-      .finally(function() {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Send Enquiry <span>↗</span>';
-      });
+        }, 2000);
+      }, 1500);
     });
 
     // Newsletter form handler
